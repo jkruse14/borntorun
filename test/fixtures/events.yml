@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  host_id: 
+  course_id: 
+  distance: 1.5
+  city: MyString
+  state: MyString
+  country: MyString
+  entry_fee: 1.5
+  description: MyText
+
+two:
+  host_id: 
+  course_id: 
+  distance: 1.5
+  city: MyString
+  state: MyString
+  country: MyString
+  entry_fee: 1.5
+  description: MyText

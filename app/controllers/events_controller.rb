@@ -1,7 +1,6 @@
-class HostsController < ApplicationController
-
-    def index
-        @hosts = Host.all
+class EventsController < ApplicationController
+     def index
+        @events = Event.all
     end
 
     def show

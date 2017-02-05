@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course_id: 
+  event_id: 
+  order_num: 
+  gps_data: MyText
+
+two:
+  course_id: 
+  event_id: 
+  order_num: 
+  gps_data: MyText

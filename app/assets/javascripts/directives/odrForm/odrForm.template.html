@@ -1,0 +1,9 @@
+<form class="form-horizontal">
+    <div ng-repeat="(key, formItem) in formObject" class="form-group row">
+        <label for="{{formItem.id}}" class="col-sm-2 control-label">{{formItem.label}}</label>
+        <div class="col-sm-10">
+            <input id="{{formItem.id}}" ng-model="ngModel[key]" class="form-conrol" type="text" placeholder="" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="submitAction()">Submit</button>
+</form>

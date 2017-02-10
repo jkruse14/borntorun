@@ -1,10 +1,14 @@
 class HostsController < ApplicationController
+    def host_params
+        params.require(:host).permit(:name, :email, :motto, :city, :state, :country, :contact_name)
+    end
 
     def index
-        @hosts = Host.all
+        respond_with Host.all
     end
 
     def show
+        respond_with Host.find(params[:id])
     end
 
     def new
@@ -14,6 +18,7 @@ class HostsController < ApplicationController
     end
 
     def create
+        respond_with Host.create(host_params)
     end
 
     def update

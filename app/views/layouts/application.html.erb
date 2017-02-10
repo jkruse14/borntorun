@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html ng-app="onDemandRaces">
+<html>
   <head>
     <title>BornToRun</title>
-    <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= csrf_meta_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body ng-app="onDemandRaces">
+    <ui-view></ui-view>
   </body>
 </html>

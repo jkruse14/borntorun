@@ -1,6 +1,7 @@
 angular
     .module('onDemandRaces')
-    .directive('odrForm', function(){
+    .directive('odrForm',[ 'fileLoader',function(fileLoader){
+        
         return {
             templateUrl:'directives/odrForm/odrForm.template.html',
             restrict: 'E',
@@ -8,18 +9,20 @@ angular
                 formObject: '=',
                 ngModel: '=',
                 'submitAction': '&',
+                'changeAction': '&',
             },
-            replace: true
-            // controller: function($scope) {
-            //     $scope.clickFunction = function() {
-            //         $scope.submitAction();
-            //     }
-            // }
-            // replace: true,
-            // link: function(scope, elm, attrs) {       
-            //     scope.callUpdate = function() {
-            //         scope.submitAction();
-            //     }
-            // }
+            controller: ['$scope', 'fileLoader', function($scope, fileLoader){
+                $scope.$watch('onChange',function(){"changed2"})
+                $scope.loadFile = function(e) {
+                    if(e != undefined) {
+                        var file = e.target.files[0];
+                    
+                        if(file != null && file.size > 0) {
+                            return file;
+                        }
+                        return null;
+                    }
+                }
+            }]
         }
-    });
+    }]);

@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
     def event_params
-        params.require(:event).permit(:host_id, :course_id, :distance, :eventType, :city, :state, :country, :entryFee, :description, :title);
+        params.require(:event).permit(:host_id, :course_id, :distance, :eventType, :city, :state, :country, :entry_fee, :description, :title);
     end
     
     def index

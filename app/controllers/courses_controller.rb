@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
     def course_params
-        params.require(:course).permit(:host_id, :event_id, :gps_data, :gps_file)
+        params.require(:course).permit(:host_id, :event_id, :gps_data)
     end
 
     def index
@@ -18,7 +18,11 @@ class CoursesController < ApplicationController
     end
 
     def create
-        respond_with Course.create(course_params)
+        course = Course.create(course_params)
+        event = Event.find_by(id: course_params[:event_id])
+        event.update(course_id: course.id)
+        
+        respond_with course 
     end
 
     def update

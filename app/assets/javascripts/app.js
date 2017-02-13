@@ -3,19 +3,20 @@ angular.module("onDemandRaces", [
     'templates',
     'odrHosts',
     'odrEvents',
+    'odrCourses',
 ])
 .config([ '$stateProvider', '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('home',{
         url: '/home',
-        templateUrl:"home/_home.html",
+        templateUrl:"components/home/_home.html",
         controller: 'MainController',
         
       })
       .state('hosts', {
         url:'/hosts',
-        templateUrl:'hosts/partials/_hostsIndex.html',
+        templateUrl:'components/hosts/partials/_hostsIndex.html',
         controller:'HostController',
         resolve:{
           hostPromise: ['odrHostsApi', function(odrHostsApi){
@@ -25,12 +26,12 @@ angular.module("onDemandRaces", [
       })
       .state('createHost',{
         url:'/createHost',
-        templateUrl: "hosts/partials/_hostsNew.html",
+        templateUrl:"components/hosts/partials/_hostsNew.html",
         controller: "HostController"
       })
       .state('events', {
         url:'/events',
-        templateUrl: 'events/partials/_index.html',
+        templateUrl:'components/events/partials/_index.html',
         controller: 'EventController',
         resolve:{
           eventPromise: ['odrEventsApi', function(odrEventsApi){
@@ -40,8 +41,23 @@ angular.module("onDemandRaces", [
       })
       .state('createEvent', {
         url: '/createEvent',
-        templateUrl:"events/partials/_eventsNew.html",
+        templateUrl:"components/events/partials/_eventsNew.html",
         controller: 'EventController',
+      })
+      .state('courses', {
+        url:'/courses',
+        templateUrl:"components/courses/partials/_coursesIndex.html",
+        controller: "CourseController"
+      })
+      .state('createCourse', {
+        url:'/createCourse',
+        templateUrl:"components/courses/partials/_coursesNew.html",
+        controller: "CourseController"
+      })
+      .state('viewEvent',{
+        url:'/viewEvent',
+        templateUrl:"components/events/partials/_viewEvent.html",
+        controller:"EventController",
       })
 
       //$urlRouterProvider.otherwise('home');

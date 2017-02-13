@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root to: 'application#angular'
 
   resources :hosts #do
-  resources :events#, :only
+  resources :events
+  resources :courses
+  resources :course_segments, only: [:create, :destroy, :index]
       #Putting in a member block makes it so our url parameters map to :id instead of :host_id
       #member do
       #end

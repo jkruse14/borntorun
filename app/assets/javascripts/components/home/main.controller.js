@@ -4,7 +4,6 @@ angular
         $scope.test = "Hello, World!";
         $scope.eventSchema = eventSchema;
         $scope.events = odrEventsApi.events;
-        console.log($scope.eventSchema);
 
         $scope.getAllEvents = function() {
             return odrEventsApi.getAll();

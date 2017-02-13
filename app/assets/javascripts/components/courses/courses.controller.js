@@ -1,6 +1,6 @@
 angular
     .module('odrCourses',[])
-    .controller('CoursesController', ['coursesSchema', 'odrCoursesApi', '$http', '$scope', function(coursesSchema, odrCoursesApi, $http, $scope){
+    .controller('CourseController', ['coursesSchema', 'odrCoursesApi', '$http', '$scope', function(coursesSchema, odrCoursesApi, $http, $scope){
         var self = this;
         self.newCourse = {};
         self.coursesSchema = coursesSchema;

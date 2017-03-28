@@ -1,6 +1,11 @@
 class EventsController < ApplicationController
+
+    def as_json(options = {})
+        super(options.merge(include: :host))
+    end
+
     def event_params
-        params.require(:event).permit(:host_id, :course_id, :distance, :eventType, :city, :state, :country, :entry_fee, :description, :title);
+        params.permit(:host_id, :course_id, :distance, :eventType, :city, :state, :country, :entry_fee, :description, :title);
     end
     
     def index
@@ -8,7 +13,11 @@ class EventsController < ApplicationController
     end
 
     def show
-        respond_with Event.find(params[:id])
+        @event = Event.find(params[:id])
+        @course = Course.find(@event.course_id)
+        @segments = CourseSegment.find_by({course_id: @course.id})
+        @response = {:event => @event, :course => @course, :segments => @segments}
+        respond_with @response
     end
 
     def new

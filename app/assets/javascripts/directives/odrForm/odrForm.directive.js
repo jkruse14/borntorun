@@ -1,6 +1,6 @@
 angular
     .module('onDemandRaces')
-    .directive('odrForm',[ 'fileLoader',function(fileLoader){
+    .directive('odrForm',[ 'fileUtils',function(fileUtils){
         
         return {
             templateUrl:'directives/odrForm/odrForm.template.html',
@@ -11,8 +11,7 @@ angular
                 'submitAction': '&',
                 'changeAction': '&',
             },
-            controller: ['$scope', 'fileLoader', function($scope, fileLoader){
-                $scope.$watch('onChange',function(){"changed2"})
+            controller: ['$scope', 'fileUtils', function($scope, fileUtils){
                 $scope.loadFile = function(e) {
                     if(e != undefined) {
                         var file = e.target.files[0];

@@ -1,4 +1,9 @@
 class CoursesController < ApplicationController
+    
+    def as_json(options = {})
+        super(options.merge(include: :course_segment))
+    end
+    
     def course_params
         params.require(:course).permit(:host_id, :event_id, :gps_data)
     end

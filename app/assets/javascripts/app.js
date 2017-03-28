@@ -55,9 +55,14 @@ angular.module("onDemandRaces", [
         controller: "CourseController"
       })
       .state('viewEvent',{
-        url:'/viewEvent',
+        url:'/viewEvent/{eventId}',
         templateUrl:"components/events/partials/_viewEvent.html",
         controller:"EventController",
+        resolve: {
+          eventPromise : ['odrEventsApi', '$stateParams', function(odrEventsApi, $stateParams){
+            return odrEventsApi.getEvent($stateParams.eventId);
+          }]
+        }
       })
 
       //$urlRouterProvider.otherwise('home');

@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
-    belongs_to :host
-    has_many :course
+    belongs_to :host, dependent: :destroy
+    has_one :course
+    has_many :course_segements, through: :course
 
     validates :distance, numericality: {greater_than: 0}
     validates :city, presence: true

@@ -1,12 +1,20 @@
 angular
     .module("onDemandRaces")
-    .factory("distanceCalculator", [function(){
+    .factory("distanceUtils", [function(){
         var self = this;
         self.attributes = {
             //one degree in meters
             ONE_DEGREE : 1000.0 * 10000.8 / 90.0,
             INTERPOLATE_MAX_DISTANCE : 20,
             START_AREA_ERROR_MARGIN : 60, //must be w/in x meters
+        };
+
+        self.toRadians = function (degInp) {
+            return degInp / 180. * Math.PI;
+        };
+
+        self.toDegrees = function (radInp) {
+            return radInp * 180 / Math.PI;
         };
 
         /**
@@ -19,10 +27,10 @@ angular
         */
         self.haversineDistance = function(deg_lat1, deg_lng1, deg_lat2, deg_lng2){
             var R = 6371000; // Earth's mean radius in meters
-            var rad_lat1 = this.toRadians(deg_lat1);
-            var rad_lat2 = this.toRadians(deg_lat2);
-            var delta_rad_lat = this.toRadians((deg_lat2-deg_lat1));
-            var delta_rad_lng = this.toRadians((deg_lng2-deg_lng1));
+            var rad_lat1 = self.toRadians(deg_lat1);
+            var rad_lat2 = self.toRadians(deg_lat2);
+            var delta_rad_lat = self.toRadians((deg_lat2-deg_lat1));
+            var delta_rad_lng = self.toRadians((deg_lng2-deg_lng1));
 
             //a is the square of half the chord length between the points
             var a = Math.sin(delta_rad_lat/2) * Math.sin(delta_rad_lat/2) +
@@ -53,7 +61,7 @@ angular
             var x = latitude_1 - latitude_2;
             var y = (longitude_1 - longitude_2) * coef;
 
-            var distance_2d = Math.sqrt(x * x + y * y) * self.ONE_DEGREE;
+            var distance_2d = Math.sqrt(x * x + y * y) * self.attributes.ONE_DEGREE;
 
             if (elevation_1 == null || elevation_2 == null || elevation_1 == elevation_2){
                 return distance_2d;

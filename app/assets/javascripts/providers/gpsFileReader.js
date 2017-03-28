@@ -1,6 +1,6 @@
 angular
 	.module("onDemandRaces")
-	.factory('gpsFileReader', ['distanceCalculator', function(distanceCalculator) {
+	.factory('gpsFileReader', ['distanceUtils', function (distanceUtils) {
 		var self = this;
 		self.attributes = {
 			//one degree in meters
@@ -71,9 +71,9 @@ angular
 					if(pt > 1) {
 						var last_lat = Math.round(Number(trkptsCopy[pt-1].attributes.lat.value)*100000)/100000;
 						var last_lng = Math.round(Number(trkptsCopy[pt-1].attributes.lon.value)*100000)/100000;
-						data.distance += distanceCalculator.calculateDistance(last_lat, last_lng, 0, lat, lng,0);
+						data.distance += distanceUtils.calculateDistance(last_lat, last_lng, 0, lat, lng,0);
 						
-						var testDist = distanceCalculator.calculateDistance(Math.round(Number(first_lat, first_lng, 0,lat, lng,0)));
+						var testDist = distanceUtils.calculateDistance(Math.round(Number(first_lat, first_lng, 0,lat, lng,0)));
 						if(testDist > longestDist) {
 							longestDist = testDist;
 							farthestPoint.lat = lat;

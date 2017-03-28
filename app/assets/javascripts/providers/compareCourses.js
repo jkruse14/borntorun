@@ -1,6 +1,6 @@
 angular
     .module("onDemandRaces")
-    .factory("compareCourses", ['distanceCalculator', function(distanceCalculator){
+    .factory("compareCourses", ['distanceUtils', function (distanceUtils){
         //much of this is converted from a great python library (gpxpy) made to compare gpx data:
         //https://github.com/tkrajina/gpxpy/blob/master/gpxpy/geo.python
         var self = this;
@@ -11,33 +11,25 @@ angular
             START_AREA_ERROR_MARGIN : 60, //must be w/in x meters
         };
 
-        self.toRadians = function(degInp) {
-            return degInp  / 180. * Math.PI;
-        };
-
-        self.toDegrees = function(radInp) {
-            return radInp*180/Math.PI;
-        };
-
         /*
         * Calculates the initial bearing between point1 and point2 relative to north
         * (zero degrees).
         */
         self.bearing = function(point1, point2) {
-            var lat1r = this.toRadians(point1[0]);
-            var lat2r = this.toRadians(point2[0]);
-            var dlon = this.toRadians(point2[1] - point1[1]);
+            var lat1r = distanceUtils.toRadians(point1[0]);
+            var lat2r = distanceUtils.toRadians(point2[0]);
+            var dlon = distanceUtils.toRadians(point2[1] - point1[1]);
 
             var y = Math.sin(dlon) * Math.cos(lat2r);
             var x = Math.cos(lat1r) * Math.sin(lat2r) - Math.sin(lat1r) * Math.cos(lat2r) * Math.cos(dlon);
             
-            return this.toDegrees(Math.atan2(y, x));
+            return distanceUtils.toDegrees(Math.atan2(y, x));
         };
 
         self.moveCoordByAngleAndDistance = function(coord, mvDist, mvAngle){
             var coef = Math.cos(coord[0]/ 180.0 * Math.PI);
-            var vertical_distance_diff   = Math.sin((90 - mvAngle) / 180 * Math.PI) / this.attributes.ONE_DEGREE;
-            var horizontal_distance_diff = Math.cos((90 - mvAngle) / 180 * Math.PI) / this.attributes.ONE_DEGREE;
+            var vertical_distance_diff   = Math.sin((90 - mvAngle) / 180 * Math.PI) / self.attributes.ONE_DEGREE;
+            var horizontal_distance_diff = Math.cos((90 - mvAngle) / 180 * Math.PI) / self.attributes.ONE_DEGREE;
             var lat_diff = mvDist * vertical_distance_diff;
             var lng_diff = mvDist * horizontal_distance_diff / coef;
             lat_diff = Math.round(lat_diff*1000000)/1000000;
@@ -77,19 +69,19 @@ angular
 
                 p2 = points[i];
 
-                d += distanceCalculator.calculateDistance(p1[0], p1[1], 0,//p1.elevation,
+                d += distanceUtils.calculateDistance(p1[0], p1[1], 0,//p1.elevation,
                                         p2[0], p2[1],0);// p2.elevation);
 
-                if(d >= this.attributes.INTERPOLATE_MAX_DISTANCE){
-                    var brng = this.bearing(p1, p2);
+                if(d >= self.attributes.INTERPOLATE_MAX_DISTANCE){
+                    var brng = self.bearing(p1, p2);
                     var p2_copy = JSON.parse(JSON.stringify(p2)); //create a deep copy (there are no functions, only an array so this will work)
-                    var locDelta = this.moveCoordByAngleAndDistance(p1, -(d-this.attributes.INTERPOLATE_MAX_DISTANCE), brng);
+                    var locDelta = self.moveCoordByAngleAndDistance(p1, -(d-self.attributes.INTERPOLATE_MAX_DISTANCE), brng);
                     p2_copy[0] += locDelta[0];
                     p2_copy[1] += locDelta[1];
                     
                     even_points.push(p2_copy);
                     d = 0;
-                    totalDistance += distanceCalculator.calculateDistance(p1[0], p1[1], 0,//p1.elevation,
+                    totalDistance += distanceUtils.calculateDistance(p1[0], p1[1], 0,//p1.elevation,
                                         p2_copy[0], p2_copy[1],0);// p2.elevation);;
                 } else {
                     totalDistance += Math.abs(d);
@@ -124,22 +116,22 @@ angular
             gap_penalty = -80;
             var courseStart = route1[0];
             var runnerStart = route2[0];
-            if(Math.abs(distanceCalculator.calculateDistance(courseStart[0],courseStart[1],0,runnerStart[0],runnerStart[1],0)) > this.attributes.START_AREA_ERROR_MARGIN){
+            if (Math.abs(distanceUtils.calculateDistance(courseStart[0],courseStart[1],0,runnerStart[0],runnerStart[1],0)) > self.attributes.START_AREA_ERROR_MARGIN){
                 //console.log("Starting positions do not match")
                 //console.log("course: "+courseStart[0]+", "+courseStart[1]);
                 //console.log("runner: "+runnerStart[0]+", "+runnerStart[1]);
-                var startDiff = distanceCalculator.calculateDistance(courseStart[0],courseStart[1],0,runnerStart[0],runnerStart[1],0);
-                return {error:"You were too far from the starting area. You were " +startDiff.toFixed(2)+" meters away and must be within "+this.attributes.START_AREA_ERROR_MARGIN+" meters.", total_similar: 0};
+                var startDiff = distanceUtils.calculateDistance(courseStart[0],courseStart[1],0,runnerStart[0],runnerStart[1],0);
+                return {error:"You were too far from the starting area. You were " +startDiff.toFixed(2)+" meters away and must be within "+self.attributes.START_AREA_ERROR_MARGIN+" meters.", total_similar: 0};
             } else {
                 //route2[0] = route1[0];
-                var route2start = this.interpolateDistance([route2[0],route1[0]]).points;
+                var route2start = self.interpolateDistance([route2[0],route1[0]]).points;
                 route2.shift();
                 for(var elt = route2start.length - 1; elt >= 0; elt--){
                     route2.unshift(route2start[elt]);
                 }
             }
             // construct f-matrix
-            var f = this.createFMatrix(route1.length, route2.length);
+            var f = self.createFMatrix(route1.length, route2.length);
             for(var i = 0; i < route1.length; i++){
                 f[i][0] = gap_penalty * i;
             }
@@ -150,7 +142,7 @@ angular
                 var t1 = route1[i];
                 for(var j = 1; j < route2.length; j++){
                     var t2 = route2[j];
-                    var match = f[i-1][j-1] + (distanceCalculator.calculateDistance(t1[0],t1[1],0, t2[0],t2[1],0) * -1);
+                    var match = f[i - 1][j - 1] + (distanceUtils.calculateDistance(t1[0],t1[1],0, t2[0],t2[1],0) * -1);
                     var del = f[i-1][j] + gap_penalty;
                     var insert = f[i][j-1] + gap_penalty;
                     f[i][j] = Math.max(match, del, insert);
@@ -170,16 +162,16 @@ angular
             while(i > 0 || j > 0) {
                 //if route 1 has more coords than 2 and current points do not match, incrememt route 1 only
                 //keep track of distance, increment route 2 when route 1 starts to diverge from route two
-                var similarity = (distanceCalculator.calculateDistance(route1[i][0],route1[i][1],0, route2[j][0],route2[j][1],0) * -1);
+                var similarity = (distanceUtils.calculateDistance(route1[i][0],route1[i][1],0, route2[j][0],route2[j][1],0) * -1);
 
                 if(route1.length > route2.length || route2.length > route1.length) {
                     var route1Longer = route1.length > route2.length;
 
                     var nextDist = null;
                     if (route1Longer && i > 0) {
-                        nextDist = (distanceCalculator.calculateDistance(route1[i-1][0],route1[i-1][1],0, route2[j][0],route2[j][1],0) * -1);	
+                        nextDist = (distanceUtils.calculateDistance(route1[i-1][0],route1[i-1][1],0, route2[j][0],route2[j][1],0) * -1);	
                     } else if(!route1Longer && j > 0){
-                        nextDist = (distanceCalculator.calculateDistance(route1[i][0],route1[i][1],0, route2[j-1][0],route2[j-1][1],0) * -1);
+                        nextDist = (distanceUtils.calculateDistance(route1[i][0],route1[i][1],0, route2[j-1][0],route2[j-1][1],0) * -1);
                     }
                     if(nextDist != null && nextDist < similarity) {
                         if(route1Longer)

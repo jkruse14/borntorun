@@ -1,8 +1,8 @@
 angular
     .module('onDemandRaces')
-    .factory("eventSchema",[ 'fileLoader', function(fileLoader) {
+    .factory("eventSchema",[ 'fileUtils', function(fileUtils) {
         var self = this;
-        self.fileLoader = fileLoader;
+        self.fileUtils = fileUtils;
         return {
             host : {id:"event-host", type:"text", label:"Event Host"},
             course: {id:"event-course", type:"text", label:"Event Course"},
@@ -12,8 +12,8 @@ angular
             city:{id:"event-city",type:"text", label:"City"},
             state:{id:"event-state", type:"text", label:"State"},
             country:{id:"event-country", type:"text", label:"Country"},
-            entryFee:{id:"event-entryFee", type:"number", label:"Entry Fee"},
+            entry_fee:{id:"event-entryFee", type:"number", label:"Entry Fee"},
             description:{id:"event-description", type:"text", label:"Description"},
-            gps_file:{id:"event-gps-file", type:"file", label:"Upload GPS File", hasChangeAction: true, changeAction:self.fileLoader.loadFile}
+            gps_file:{id:"event-gps-file", type:"file", label:"Upload GPS File", hasChangeAction: true, changeAction:self.fileUtils.loadFile}
         }
     }]);

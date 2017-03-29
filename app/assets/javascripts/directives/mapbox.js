@@ -43,8 +43,8 @@ angular
                     coordinates: $scope.course.geometry.coordinates,
                     properties: $scope.course.properties,
                 })
-                let lat = $scope.course.geometry.coordinates[0][1]
-                let lng = $scope.course.geometry.coordinates[0][0]
+                var lat = $scope.course.geometry.coordinates[0][1]
+                var lng = $scope.course.geometry.coordinates[0][0]
                 $scope.map.setView([lat, lng],14)
                 featureLayer.on('ready', function() {
                     
@@ -52,7 +52,7 @@ angular
                     
                 });
 
-                let renderResultData = function() {
+                var renderResultData = function() {
                     if($scope.resultsFileData && $scope.resultsFileData.geometry.coordinates) {
                         console.log("rf", $scope.resultsFileData);
                             var resultsLayer = L.mapbox.featureLayer().addTo($scope.map);

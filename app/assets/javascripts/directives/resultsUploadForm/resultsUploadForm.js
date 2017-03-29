@@ -9,7 +9,7 @@ angular
                 ngModel : "="
             },
             controller: ['$scope','$rootScope', 'fileUtils', function($scope, $rootScope, fileUtils){
-                let self = this;
+                var self = this;
 
                 $scope.loadFile = function(e) {
                     if(e != undefined) {

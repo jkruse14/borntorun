@@ -36,7 +36,7 @@ angular
                     host_id: eventData.data.host_id,
                     event_id: eventData.data.id,
                 }
-                fileUtils.processGPXFile(gps_file,course).then((fileData)=>{
+                fileUtils.processGPXFile(gps_file,course).then(function(fileData){
                     odrCoursesApi.create(fileData.course, fileData.coords).then(function(data){
                     });
                 })

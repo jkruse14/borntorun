@@ -13,6 +13,7 @@ gem 'angular-rails-templates'
 gem 'angular_rails_csrf'
 gem 'responders'
 gem 'redis-rails', '~> 5.0', '>= 5.0.1'
+gem 'bcrypt',         '3.1.11'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets

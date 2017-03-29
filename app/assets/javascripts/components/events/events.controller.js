@@ -11,9 +11,7 @@ angular
 
         $scope.$on('result-loaded', function(event, data){
             $scope.resultsFileData = createGeoJSONObject(data.coords);
-            console.log($scope.event);
-            let results = compareCourses.doComparison($scope.event.geoJSONCourse.geometry.coordinates, data.coords, 60);
-            console.log(results);
+            var results = compareCourses.doComparison($scope.event.geoJSONCourse.geometry.coordinates, data.coords, 60);
         })
 
         $scope.getAllEvents = function() {
